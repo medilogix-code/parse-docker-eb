@@ -1,0 +1,69 @@
+version: '3.8'
+services:
+    krugergold:
+        build: .
+        ports:
+            - '8081:8081'
+        volumes:
+            - .:/app
+        environment:
+            - NODE_ENV=development
+            - PORT=8081
+            - DATABASE_URI=mongodb://mongo:27017/krugergold
+            - APP_ID=randomappid
+            - CLIENT_KEY=randomclientkey
+            - JAVASCRIPT_KEY=randomjavascriptkey
+            - REST_API_KEY=randomrestapikey
+            - MASTER_KEY=masterkeydevelopment
+            - SERVER_URL=http://localhost:8081/client
+            - APP_SLUG=krugergold
+        depends_on:
+            - mongo
+    ventry:
+        build: .
+        ports:
+            - '8082:8082'
+        volumes:
+            - .:/app
+        environment:
+            - NODE_ENV=development
+            - PORT=8082
+            - DATABASE_URI=mongodb://mongo:27017/ventry
+            - APP_ID=randomappid
+            - CLIENT_KEY=randomclientkey
+            - JAVASCRIPT_KEY=randomjavascriptkey
+            - REST_API_KEY=randomrestapikey
+            - MASTER_KEY=masterkeydevelopment
+            - SERVER_URL=http://localhost:8082/client
+            - APP_SLUG=ventry
+        depends_on:
+            - mongo
+    medlogix:
+        build: .
+        ports:
+            - '8083:8083'
+        volumes:
+            - .:/app
+        environment:
+            - NODE_ENV=development
+            - PORT=8083
+            - DATABASE_URI=mongodb://mongo:27017/medlogix
+            - APP_ID=randomappid
+            - CLIENT_KEY=randomclientkey
+            - JAVASCRIPT_KEY=randomjavascriptkey
+            - REST_API_KEY=randomrestapikey
+            - MASTER_KEY=masterkeydevelopment
+            - SERVER_URL=http://localhost:8083/client
+            - APP_SLUG=medlogix
+        depends_on:
+            - mongo
+    mongo:
+        image: mongo:latest
+        ports:
+            - '27017:27017'
+        environment:
+            - MONGO_INITDB_DATABASE=synotech
+        volumes:
+            - mongo-data:/data/db
+volumes:
+    mongo-data:

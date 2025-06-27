@@ -1,0 +1,8 @@
+{
+  "AWSEBDockerrunVersion": "3",
+  "services": {
+    "web": {
+      "composeFile": "./docker-compose-production.yml"
+    }
+  }
+}

@@ -1,13 +1,13 @@
-import http from 'http';
-import { ParseServer } from 'parse-server';
-import { config } from '../../config.js';
-import express from 'express';
+import http from 'http'
+import { ParseServer } from 'parse-server'
+import { config } from '../../config.js'
+import express from 'express'
 
 export const dropDB = async () => {
-  await Parse.User.logOut();
-  return await Parse.Server.database.deleteEverything(true);
-};
-let parseServerState = {};
+	await Parse.User.logOut()
+	return await Parse.Server.database.deleteEverything(true)
+}
+let parseServerState = {}
 
 /**
  * Starts the ParseServer instance
@@ -15,34 +15,34 @@ let parseServerState = {};
  * @return {Promise} Runner state
  */
 export async function startParseServer() {
-  delete config.databaseAdapter;
-  const parseServerOptions = Object.assign(config, {
-    databaseURI: 'mongodb://localhost:27017/parse-test',
-    masterKey: 'test',
-    javascriptKey: 'test',
-    appId: 'test',
-    port: 30001,
-    mountPath: '/test',
-    serverURL: `http://localhost:30001/test`,
-    logLevel: 'error',
-    silent: true,
-    allowClientClassCreation: true,
-  });
-  const parseServer = new ParseServer(parseServerOptions);
-  await parseServer.start();
+	delete config.databaseAdapter
+	const parseServerOptions = Object.assign(config, {
+		databaseURI: 'mongodb://localhost:27017/parse-test',
+		masterKey: 'test',
+		javascriptKey: 'test',
+		appId: 'test',
+		port: 30001,
+		mountPath: '/test',
+		serverURL: `http://localhost:30001/test`,
+		logLevel: 'error',
+		silent: true,
+		allowClientClassCreation: true,
+	})
+	const parseServer = new ParseServer(parseServerOptions)
+	await parseServer.start()
 
-  const app = express();
-  app.use(parseServerOptions.mountPath, parseServer.app);
-  const httpServer = http.createServer(app);
-  await new Promise(resolve => httpServer.listen(parseServerOptions.port, resolve));
+	const app = express()
+	app.use(parseServerOptions.mountPath, parseServer.app)
+	const httpServer = http.createServer(app)
+	await new Promise((resolve) => httpServer.listen(parseServerOptions.port, resolve))
 
-  Object.assign(parseServerState, {
-    parseServer,
-    httpServer,
-    parseServerOptions,
-  });
+	Object.assign(parseServerState, {
+		parseServer,
+		httpServer,
+		parseServerOptions,
+	})
 
-  return parseServerOptions;
+	return parseServerOptions
 }
 
 /**
@@ -50,6 +50,6 @@ export async function startParseServer() {
  * @return {Promise}
  */
 export async function stopParseServer() {
-  await new Promise(resolve => parseServerState.httpServer.close(resolve));
-  parseServerState = {};
+	await new Promise((resolve) => parseServerState.httpServer.close(resolve))
+	parseServerState = {}
 }
